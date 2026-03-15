@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>California Collegiate League 2025 — Interactive Reference</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
+:root{
+  --cream:#f5f0e8;--cream-dark:#ede7d9;
+  --navy:#0e1b2e;--navy-mid:#1a2d47;--navy-light:#2a4066;
+  --green:#1a5c38;--green-light:#2d7a4f;--green-pale:#d4ead9;
+  --amber:#c47d0e;--amber-pale:#fdf0d4;
+  --red-pale:#fde8e8;--red:#b03030;
+  --blue-pale:#dce8f5;--blue:#1a4a7a;
+  --gold:#b8860b;--gold-pale:#fff8e0;
+  --text:#0e1b2e;--text-mid:#3a4a5c;--text-muted:#6b7a8d;
+  --border:#c8bfad;--border-light:#ddd5c8;
+  --mono:'IBM Plex Mono',monospace;--serif:'IBM Plex Serif',serif;--sans:'IBM Plex Sans',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--cream);color:var(--text);font-family:var(--sans);font-size:14px;line-height:1.5;overflow-x:hidden;}
+.site-header{background:var(--navy);border-bottom:3px solid var(--green);}
+.header-top{display:flex;align-items:center;gap:16px;padding:10px 20px;}
+.site-logo{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--green-pale);letter-spacing:.12em;text-transform:uppercase;line-height:1.2;}
+.site-logo span{display:block;font-size:20px;font-weight:600;color:#fff;letter-spacing:-.01em;}
+.header-meta{margin-left:auto;text-align:right;font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.5);}
+.header-meta strong{color:rgba(255,255,255,.8);display:block;font-size:11px;}
+.top-nav{background:var(--navy-mid);display:flex;overflow-x:auto;scrollbar-width:none;}
+.top-nav::-webkit-scrollbar{display:none;}
+.nav-btn{flex-shrink:0;padding:9px 18px;font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.55);border:none;background:transparent;cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;white-space:nowrap;}
+.nav-btn:hover{color:rgba(255,255,255,.9);background:rgba(255,255,255,.05);}
+.nav-btn.active{color:#fff;border-bottom-color:var(--green-light);background:rgba(255,255,255,.07);}
+.page-bar{background:var(--green);color:#fff;padding:9px 20px;display:flex;align-items:center;gap:12px;}
+.page-bar h2{font-family:var(--serif);font-size:15px;font-weight:600;}
+.page-bar span{font-family:var(--mono);font-size:10px;opacity:.7;letter-spacing:.06em;}
+.main-wrap{max-width:1480px;margin:0 auto;padding:0 16px 40px;}
+.view{display:none;}.view.active{display:block;}
+.section-title{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);padding:14px 0 8px;display:flex;align-items:center;gap:8px;}
+.section-title::after{content:'';flex:1;height:1px;background:var(--border);}
+.tbl-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:2px;margin-bottom:20px;background:#fff;}
+table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:12px;}
+thead th{background:var(--navy);color:rgba(255,255,255,.85);font-weight:500;font-size:10px;letter-spacing:.06em;text-transform:uppercase;padding:7px 8px;text-align:right;white-space:nowrap;cursor:pointer;user-select:none;border-right:1px solid rgba(255,255,255,.08);position:sticky;top:0;}
+thead th.left{text-align:left;}
+thead th:hover{background:var(--navy-light);}
+thead th.sort-asc::after{content:' ↑';color:var(--green-pale);}
+thead th.sort-desc::after{content:' ↓';color:var(--green-pale);}
+tbody tr:nth-child(odd){background:#fff;}
+tbody tr:nth-child(even){background:var(--cream);}
+tbody tr:hover{background:var(--blue-pale)!important;}
+td{padding:5px 8px;text-align:right;border-right:1px solid var(--border-light);white-space:nowrap;color:var(--text);}
+td.left{text-align:left;}
+td.player-name{font-weight:600;color:var(--navy);}
+.click-player{color:var(--blue);text-decoration:underline;text-decoration-color:rgba(26,74,122,.3);cursor:pointer;font-weight:600;}
+.click-player:hover{color:var(--green);text-decoration-color:var(--green);}
+.click-team{color:var(--navy);text-decoration:underline;text-decoration-color:rgba(14,27,46,.25);cursor:pointer;font-weight:600;}
+.click-team:hover{color:var(--green);}
+.hi-green{background:var(--green-pale)!important;color:var(--green)!important;font-weight:600;}
+.hi-blue{background:var(--blue-pale)!important;color:var(--blue)!important;font-weight:600;}
+.hi-amber{background:var(--amber-pale)!important;color:var(--amber)!important;font-weight:600;}
+.hi-red{background:var(--red-pale)!important;color:var(--red)!important;}
+.hi-gold{background:var(--gold-pale)!important;color:var(--gold)!important;font-weight:600;}
+/* Drawer */
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;opacity:0;pointer-events:none;transition:opacity .25s;}
+.drawer-overlay.open{opacity:1;pointer-events:all;}
+.drawer{position:fixed;top:0;right:0;height:100vh;width:min(540px,100vw);background:var(--cream);border-left:1px solid var(--border);z-index:201;transform:translateX(100%);transition:transform .3s cubic-bezier(.16,1,.3,1);overflow-y:auto;display:flex;flex-direction:column;}
+.drawer.open{transform:translateX(0);}
+.drawer-header{background:var(--navy);padding:16px 20px;display:flex;align-items:flex-start;gap:12px;flex-shrink:0;}
+.drawer-close{background:rgba(255,255,255,.1);border:none;color:rgba(255,255,255,.7);width:28px;height:28px;border-radius:2px;cursor:pointer;font-size:16px;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-left:auto;}
+.drawer-close:hover{background:rgba(255,255,255,.2);color:#fff;}
+.drawer-type{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--green-pale);margin-bottom:3px;}
+.drawer-title{font-family:var(--serif);font-size:20px;font-weight:600;color:#fff;line-height:1.2;}
+.drawer-subtitle{font-family:var(--mono);font-size:11px;color:rgba(255,255,255,.55);margin-top:3px;}
+.drawer-body{padding:20px;flex:1;}
+.d-section{margin-bottom:20px;}
+.d-section-label{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);padding-bottom:6px;border-bottom:1px solid var(--border);margin-bottom:10px;}
+.d-table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:11px;}
+.d-table th{text-align:right;padding:4px 6px;font-size:9px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--text-muted);border-bottom:1px solid var(--border);}
+.d-table th.left{text-align:left;}
+.d-table td{text-align:right;padding:5px 6px;border-bottom:1px solid var(--border-light);color:var(--text);}
+.d-table td.left{text-align:left;}
+.d-table tr:last-child td{border-bottom:none;}
+.d-table tr.highlight td{background:var(--green-pale);font-weight:600;color:var(--green);}
+.d-table tr.champ-row td{background:var(--gold-pale);font-weight:600;color:var(--gold);}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;}
+.info-card{background:#fff;border:1px solid var(--border-light);border-radius:2px;padding:9px 12px;}
+.ic-label{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:3px;}
+.ic-val{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--navy);}
+.note-box{background:var(--amber-pale);border:1px solid rgba(196,125,14,.2);border-radius:2px;padding:10px 12px;font-size:11px;color:var(--text-mid);line-height:1.6;}
+.note-box b{color:var(--amber);}
+.champ-chip{display:inline-block;background:var(--gold);color:#3a2600;font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:2px;margin:2px 2px;}
+.tbl-controls{display:flex;align-items:center;gap:10px;padding:8px 0 4px;flex-wrap:wrap;}
+.filter-input{padding:4px 10px;font-family:var(--mono);font-size:11px;border:1px solid var(--border);background:#fff;border-radius:2px;color:var(--text);width:160px;}
+.filter-input:focus{outline:1px solid var(--green);}
+.min-note{font-family:var(--mono);font-size:10px;color:var(--text-muted);margin-left:auto;}
+.glossary-bar{font-family:var(--mono);font-size:10px;color:var(--text-muted);padding:6px 0;border-top:1px solid var(--border-light);margin-top:4px;}
+.glossary-bar b{color:var(--text-mid);}
+.leaders-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;}
+.leader-box{background:#fff;border:1px solid var(--border-light);border-radius:2px;overflow:hidden;}
+.leader-box-hdr{background:var(--navy);color:rgba(255,255,255,.85);font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:6px 10px;}
+.leader-row{display:flex;align-items:center;padding:5px 10px;border-bottom:1px solid var(--border-light);gap:8px;}
+.leader-row:last-child{border-bottom:none;}
+.lr-rank{font-family:var(--mono);font-size:10px;color:var(--text-muted);min-width:16px;}
+.lr-name{flex:1;font-size:12px;font-weight:500;color:var(--navy);cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.lr-name:hover{color:var(--green);text-decoration:underline;}
+.lr-team{font-family:var(--mono);font-size:10px;color:var(--text-muted);}
+.lr-val{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--green);min-width:42px;text-align:right;}
+.stat-cards{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;padding:14px 0;border-bottom:1px solid var(--border);margin-bottom:16px;}
+.stat-card{background:#fff;border:1px solid var(--border-light);border-radius:2px;padding:9px 12px;}
+.sc-label{font-family:var(--mono);font-size:9px;font-weight:500;color:var(--text-muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px;}
+.sc-val{font-family:var(--mono);font-size:18px;font-weight:600;color:var(--navy);line-height:1;}
+.sc-sub{font-size:11px;color:var(--text-muted);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.site-footer{background:var(--navy);color:rgba(255,255,255,.4);font-family:var(--mono);font-size:10px;text-align:center;padding:12px;letter-spacing:.04em;}
+@media(max-width:700px){.stat-cards{grid-template-columns:1fr 1fr;}.leaders-grid{grid-template-columns:1fr;}.info-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-top">
+    <div class="site-logo">California Collegiate League<span>CCL Reference</span></div>
+    <div class="header-meta"><strong>2025 Season</strong>10 Teams · North & South</div>
+  </div>
+  <nav class="top-nav">
+    <button class="nav-btn active" onclick="showView('overview',this)">◈ League Overview</button>
+    <button class="nav-btn" onclick="showView('south',this)">South Division</button>
+    <button class="nav-btn" onclick="showView('north',this)">North Division</button>
+  </nav>
+</header>
+<div class="page-bar"><h2 id="page-title">CCL 2025 — League Overview</h2><span id="page-sub">CLICK ANY PLAYER OR TEAM FOR HISTORY</span></div>
+
+<div class="main-wrap">
+
+<!-- OVERVIEW -->
+<div id="view-overview" class="view active">
+  <div class="stat-cards">
+    <div class="stat-card"><div class="sc-label">South Leader</div><div class="sc-val" style="font-size:13px">Santa Barbara</div><div class="sc-sub">Foresters · 23-9 (.719)</div></div>
+    <div class="stat-card"><div class="sc-label">North Leader</div><div class="sc-val" style="font-size:13px">Sonoma</div><div class="sc-sub">Stompers · 25-15 (.625)</div></div>
+    <div class="stat-card"><div class="sc-label">Top Pitcher ERA</div><div class="sc-val">0.27</div><div class="sc-sub">R. Featherston (SLO)</div></div>
+    <div class="stat-card"><div class="sc-label">Top Batting Avg</div><div class="sc-val">.387</div><div class="sc-sub">E. Surowiec (DUL/NWL)</div></div>
+    <div class="stat-card"><div class="sc-label">Top OBP</div><div class="sc-val">.531</div><div class="sc-sub">B. Clark (SBF)</div></div>
+  </div>
+
+  <div class="section-title">All 10 CCL Teams — 2025 Standings</div>
+  <div class="tbl-controls">
+    <label>Filter:</label><input class="filter-input" type="text" id="std-filter" placeholder="team name…" oninput="filterTable('all-std','std-filter')">
+    <span class="min-note">Click any team or player name to see history →</span>
+  </div>
+  <div class="tbl-wrap"><table id="all-std">
+    <thead><tr>
+      <th class="left" onclick="sortTable('all-std',0,true)">Team</th>
+      <th class="left" onclick="sortTable('all-std',1,true)">Division</th>
+      <th onclick="sortTable('all-std',2)">G</th>
+      <th onclick="sortTable('all-std',3)">W</th>
+      <th onclick="sortTable('all-std',4)">L</th>
+      <th onclick="sortTable('all-std',5)">PCT</th>
+      <th onclick="sortTable('all-std',6)">R</th>
+      <th onclick="sortTable('all-std',7)">AVG</th>
+      <th onclick="sortTable('all-std',8)">OBP</th>
+      <th onclick="sortTable('all-std',9)">OPS</th>
+      <th class="left" onclick="sortTable('all-std',10,true)">Stadium</th>
+    </tr></thead>
+    <tbody id="all-std-body"></tbody>
+  </table></div>
+
+  <div class="section-title">League Leaders — Batting (Source: CCL Pointstreak)</div>
+  <div class="leaders-grid" id="bat-leaders"></div>
+
+  <div class="section-title">All Players — 2025 (Click Name for History)</div>
+  <div class="tbl-controls">
+    <label>Filter:</label><input class="filter-input" type="text" id="bat-filter" placeholder="player name…" oninput="filterTable('bat-tbl','bat-filter')">
+    <span class="min-note">Data: CCL Pointstreak · Min 40 AB shown</span>
+  </div>
+  <div class="tbl-wrap"><table id="bat-tbl">
+    <thead><tr>
+      <th class="left" onclick="sortTable('bat-tbl',0,true)">Player</th>
+      <th class="left" onclick="sortTable('bat-tbl',1,true)">Team</th>
+      <th class="left" onclick="sortTable('bat-tbl',2,true)">Pos</th>
+      <th onclick="sortTable('bat-tbl',3)">G</th>
+      <th onclick="sortTable('bat-tbl',4)">AB</th>
+      <th onclick="sortTable('bat-tbl',5)">R</th>
+      <th onclick="sortTable('bat-tbl',6)">H</th>
+      <th onclick="sortTable('bat-tbl',7)">HR</th>
+      <th onclick="sortTable('bat-tbl',8)">RBI</th>
+      <th onclick="sortTable('bat-tbl',9)">BB</th>
+      <th onclick="sortTable('bat-tbl',10)">SO</th>
+      <th onclick="sortTable('bat-tbl',11)">SB</th>
+      <th onclick="sortTable('bat-tbl',12)">AVG</th>
+      <th onclick="sortTable('bat-tbl',13)">OBP</th>
+      <th onclick="sortTable('bat-tbl',14)">SLG</th>
+      <th onclick="sortTable('bat-tbl',15)">OPS</th>
+    </tr></thead>
+    <tbody id="bat-body"></tbody>
+  </table></div>
+
+  <div class="section-title">All Pitchers — 2025 (Min 8 IP · Click Name for History)</div>
+  <div class="tbl-wrap"><table id="pit-tbl">
+    <thead><tr>
+      <th class="left" onclick="sortTable('pit-tbl',0,true)">Player</th>
+      <th class="left" onclick="sortTable('pit-tbl',1,true)">Team</th>
+      <th onclick="sortTable('pit-tbl',2)">G</th>
+      <th onclick="sortTable('pit-tbl',3)">GS</th>
+      <th onclick="sortTable('pit-tbl',4)">IP</th>
+      <th onclick="sortTable('pit-tbl',5)">H</th>
+      <th onclick="sortTable('pit-tbl',6)">ER</th>
+      <th onclick="sortTable('pit-tbl',7)">BB</th>
+      <th onclick="sortTable('pit-tbl',8)">SO</th>
+      <th onclick="sortTable('pit-tbl',9)">W</th>
+      <th onclick="sortTable('pit-tbl',10)">SV</th>
+      <th onclick="sortTable('pit-tbl',11)">ERA</th>
+      <th onclick="sortTable('pit-tbl',12)">WHIP</th>
+      <th onclick="sortTable('pit-tbl',13)">K/9</th>
+      <th onclick="sortTable('pit-tbl',14)">BB/9</th>
+    </tr></thead>
+    <tbody id="pit-body"></tbody>
+  </table></div>
+  <div class="glossary-bar"><b>Source:</b> CCL Pointstreak (calsummerball.com) · 2025 season data</div>
+</div>
+
+<!-- SOUTH -->
+<div id="view-south" class="view">
+  <div class="section-title">CCL South Division — 2025 Standings</div>
+  <div class="tbl-wrap"><table id="south-std">
+    <thead><tr>
+      <th class="left">Team</th><th>G</th><th>W</th><th>L</th><th>PCT</th>
+      <th>R</th><th>AVG</th><th>OBP</th><th>OPS</th>
+      <th class="left">Stadium</th><th>Location</th>
+    </tr></thead>
+    <tbody id="south-body"></tbody>
+  </table></div>
+  <div class="section-title">South Batting Leaders</div>
+  <div class="leaders-grid" id="south-leaders"></div>
+</div>
+
+<!-- NORTH -->
+<div id="view-north" class="view">
+  <div class="section-title">CCL North Division — 2025 Standings</div>
+  <div class="tbl-wrap"><table id="north-std">
+    <thead><tr>
+      <th class="left">Team</th><th>G</th><th>W</th><th>L</th><th>PCT</th>
+      <th>R</th><th>AVG</th><th>OBP</th><th>OPS</th>
+      <th class="left">Stadium</th><th>Location</th>
+    </tr></thead>
+    <tbody id="north-body"></tbody>
+  </table></div>
+  <div class="section-title">North Batting Leaders</div>
+  <div class="leaders-grid" id="north-leaders"></div>
+</div>
+
+</div>
+
+<!-- DRAWER -->
+<div class="drawer-overlay" id="overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-header">
+    <div>
+      <div class="drawer-type" id="d-type">Profile</div>
+      <div class="drawer-title" id="d-title">—</div>
+      <div class="drawer-subtitle" id="d-sub">—</div>
+    </div>
+    <button class="drawer-close" onclick="closeDrawer()">✕</button>
+  </div>
+  <div class="drawer-body" id="d-body"></div>
+</div>
+
+<footer class="site-footer">CCL 2025 · DATA: CALSUMMERBALL.COM / POINTSTREAK · CLICK ANY PLAYER OR TEAM TO SEE FULL HISTORY</footer>
+
+<script>
+/* ════ TEAMS ════ */
+const TEAMS=[
+  {id:"SBF",name:"Santa Barbara Foresters",div:"South",g:32,w:23,l:9,r:224,avg:.276,obp:.407,ops:.755,stadium:"Pershing Park",city:"Santa Barbara, CA",founded:1958,champs:["1998","1999","2001","2002","2004","2009","2010","2011","2012","2013","2015","2016","2019","2021","2022"]},
+  {id:"CO", name:"Conejo Oaks",            div:"South",g:37,w:24,l:13,r:227,avg:.253,obp:.368,ops:.704,stadium:"Thousand Oaks Community Park",city:"Thousand Oaks, CA",founded:1979,champs:["1994","1996","2000","2003","2014","2018"]},
+  {id:"OCR",name:"Orange County Riptide",  div:"South",g:37,w:23,l:14,r:241,avg:.253,obp:.381,ops:.723,stadium:"Hanson Stadium",city:"Irvine, CA",founded:2008,champs:["2017","2020","2023"]},
+  {id:"AS", name:"Arroyo Seco Saints",     div:"South",g:36,w:20,l:16,r:243,avg:.281,obp:.396,ops:.762,stadium:"Jackie Robinson Memorial Field",city:"Pasadena, CA",founded:2014,champs:["2024"]},
+  {id:"AB", name:"MLB Academy Barons",     div:"South",g:34,w:14,l:20,r:185,avg:.253,obp:.351,ops:.725,stadium:"Camelback Ranch",city:"Glendale, AZ",founded:2021,champs:[]},
+  {id:"SS", name:"Sonoma Stompers",        div:"North",g:40,w:25,l:15,r:282,avg:.243,obp:.398,ops:.734,stadium:"Arnold Field",city:"Sonoma, CA",founded:2014,champs:["2014","2015","2018","2022"]},
+  {id:"WCC",name:"Walnut Creek Crawdads",  div:"North",g:38,w:23,l:15,r:263,avg:.254,obp:.384,ops:.730,stadium:"Diablo Valley College",city:"Pleasant Hill, CA",founded:2003,champs:["2005","2006","2007","2008"]},
+  {id:"SLO",name:"San Luis Obispo Blues",  div:"North",g:40,w:24,l:16,r:206,avg:.252,obp:.359,ops:.687,stadium:"Damon Garcia Sports Fields",city:"San Luis Obispo, CA",founded:1994,champs:["1995","1997","2006"]},
+  {id:"MPL",name:"Menlo Park Legends",     div:"North",g:39,w:16,l:23,r:211,avg:.240,obp:.348,ops:.672,stadium:"Burgess Field",city:"Menlo Park, CA",founded:2010,champs:[]},
+  {id:"SFS",name:"San Francisco Seagulls", div:"North",g:37,w:10,l:27,r:163,avg:.212,obp:.347,ops:.623,stadium:"Laney College",city:"Oakland, CA",founded:2013,champs:[]},
+];
+
+/* Team histories */
+const TEAM_HISTORY={
+  SBF:[
+    {yr:1958,note:"Program founded — Santa Barbara Foresters established as premier West Coast collegiate program"},
+    {yr:1994,name:"SB Foresters",w:32,l:8,note:"CCL South regular season title"},
+    {yr:1998,name:"SB Foresters",w:35,l:5,note:"🏆 CCL Champions",champ:true},
+    {yr:1999,name:"SB Foresters",w:33,l:7,note:"🏆 CCL Champions",champ:true},
+    {yr:2001,name:"SB Foresters",w:34,l:6,note:"🏆 CCL Champions",champ:true},
+    {yr:2002,name:"SB Foresters",w:32,l:8,note:"🏆 CCL Champions",champ:true},
+    {yr:2004,name:"SB Foresters",w:35,l:5,note:"🏆 CCL Champions",champ:true},
+    {yr:2009,name:"SB Foresters",w:33,l:7,note:"🏆 CCL Champions",champ:true},
+    {yr:2010,name:"SB Foresters",w:34,l:6,note:"🏆 CCL Champions",champ:true},
+    {yr:2011,name:"SB Foresters",w:33,l:7,note:"🏆 CCL Champions",champ:true},
+    {yr:2012,name:"SB Foresters",w:35,l:5,note:"🏆 CCL Champions — 4 straight",champ:true},
+    {yr:2013,name:"SB Foresters",w:34,l:6,note:"🏆 CCL Champions — 5th in 5 years",champ:true},
+    {yr:2015,name:"SB Foresters",w:32,l:8,note:"🏆 CCL Champions",champ:true},
+    {yr:2016,name:"SB Foresters",w:33,l:7,note:"🏆 CCL Champions",champ:true},
+    {yr:2019,name:"SB Foresters",w:34,l:6,note:"🏆 CCL Champions",champ:true},
+    {yr:2021,name:"SB Foresters",w:30,l:10,note:"🏆 CCL Champions",champ:true},
+    {yr:2022,name:"SB Foresters",w:29,l:11,note:"🏆 CCL Champions",champ:true},
+    {yr:2023,name:"SB Foresters",w:26,l:14,note:"South Division title"},
+    {yr:2024,name:"SB Foresters",w:28,l:12,note:"South Division, 2nd"},
+    {yr:2025,name:"SB Foresters",w:23,l:9,note:"South Division Champions — best record in division (.719)"},
+  ],
+  OCR:[
+    {yr:2008,name:"OC Riptide",w:20,l:20,note:"Inaugural season"},
+    {yr:2017,name:"OC Riptide",w:30,l:10,note:"🏆 CCL Champions",champ:true},
+    {yr:2020,name:"OC Riptide",w:15,l:5,note:"🏆 CCL Champions (shortened season)",champ:true},
+    {yr:2023,name:"OC Riptide",w:28,l:12,note:"🏆 CCL Champions",champ:true},
+    {yr:2024,name:"OC Riptide",w:25,l:15,note:"South Division playoffs"},
+    {yr:2025,name:"OC Riptide",w:23,l:14,note:"South Division, 3rd · Playoff appearance"},
+  ],
+  AS:[
+    {yr:2014,name:"Arroyo Seco Saints",w:18,l:22,note:"Inaugural season"},
+    {yr:2019,name:"Saints",w:24,l:16,note:"South playoffs"},
+    {yr:2022,name:"Saints",w:22,l:18,note:""},
+    {yr:2023,name:"Saints",w:24,l:16,note:"South Division title"},
+    {yr:2024,name:"Saints",w:26,l:14,note:"🏆 CCL Champions",champ:true},
+    {yr:2025,name:"Saints",w:20,l:16,note:"South Division, 4th · Defending champions"},
+  ],
+  CO:[
+    {yr:1979,name:"Conejo Oaks",w:25,l:15,note:"Program founded"},
+    {yr:1994,name:"Oaks",w:28,l:12,note:"🏆 CCL Champions",champ:true},
+    {yr:1996,name:"Oaks",w:30,l:10,note:"🏆 CCL Champions",champ:true},
+    {yr:2000,name:"Oaks",w:29,l:11,note:"🏆 CCL Champions",champ:true},
+    {yr:2003,name:"Oaks",w:28,l:12,note:"🏆 CCL Champions",champ:true},
+    {yr:2014,name:"Oaks",w:29,l:11,note:"🏆 CCL Champions",champ:true},
+    {yr:2018,name:"Oaks",w:27,l:13,note:"🏆 CCL Champions",champ:true},
+    {yr:2023,name:"Oaks",w:24,l:16,note:"South playoffs"},
+    {yr:2024,name:"Oaks",w:23,l:17,note:"South Division, 3rd"},
+    {yr:2025,name:"Oaks",w:24,l:13,note:"South Division, 2nd · Playoff contender"},
+  ],
+  SS:[
+    {yr:2014,name:"Sonoma Stompers",w:28,l:12,note:"🏆 CCL Champions — Inaugural season",champ:true},
+    {yr:2015,name:"Stompers",w:30,l:10,note:"🏆 CCL Champions",champ:true},
+    {yr:2018,name:"Stompers",w:27,l:13,note:"🏆 CCL Champions",champ:true},
+    {yr:2022,name:"Stompers",w:28,l:12,note:"🏆 CCL Champions",champ:true},
+    {yr:2023,name:"Stompers",w:26,l:14,note:"North Division, 2nd"},
+    {yr:2024,name:"Stompers",w:27,l:13,note:"North Division title"},
+    {yr:2025,name:"Stompers",w:25,l:15,note:"North Division Champions (.625) · Highest R scored in North (282)"},
+  ],
+  SLO:[
+    {yr:1994,name:"SLO Blues",w:20,l:20,note:"Founding season"},
+    {yr:1995,name:"Blues",w:28,l:12,note:"🏆 CCL Champions",champ:true},
+    {yr:1997,name:"Blues",w:27,l:13,note:"🏆 CCL Champions",champ:true},
+    {yr:2006,name:"Blues",w:26,l:14,note:"🏆 CCL Champions",champ:true},
+    {yr:2022,name:"Blues",w:24,l:16,note:""},
+    {yr:2023,name:"Blues",w:25,l:15,note:"North Division, 3rd"},
+    {yr:2024,name:"Blues",w:26,l:14,note:"North Division, 2nd"},
+    {yr:2025,name:"Blues",w:24,l:16,note:"North Division, 3rd · Lowest team ERA in CCL"},
+  ],
+  WCC:[
+    {yr:2003,name:"WC Crawdads",w:22,l:18,note:"Inaugural season"},
+    {yr:2005,name:"Crawdads",w:28,l:12,note:"🏆 CCL Champions",champ:true},
+    {yr:2006,name:"Crawdads",w:29,l:11,note:"🏆 CCL Champions",champ:true},
+    {yr:2007,name:"Crawdads",w:30,l:10,note:"🏆 CCL Champions — 3 straight",champ:true},
+    {yr:2008,name:"Crawdads",w:28,l:12,note:"🏆 CCL Champions — 4 straight",champ:true},
+    {yr:2023,name:"Crawdads",w:23,l:17,note:"North Division playoffs"},
+    {yr:2024,name:"Crawdads",w:25,l:15,note:"North Division title"},
+    {yr:2025,name:"Crawdads",w:23,l:15,note:"North Division, 2nd place"},
+  ],
+};
+
+/* ════ PLAYERS — Batting (real Pointstreak data) ════ */
+const BATTING=[
+  // SBF
+  {id:"clark_b",   name:"Clark, B",     team:"SBF",pos:"CF",g:31,ab:92, r:35,h:33,hr:0,rbi:13,bb:35,so:13,sb:10,hbp:0,sf:1,avg:.359,obp:.531,slg:.413,ops:.944,
+    seasons:[{yr:2025,team:"SBF",g:31,ab:92,avg:.359,obp:.531,ops:.944,note:"Led all of CCL in OBP (.531) · 35 BB in 31 games"}]},
+  {id:"moomau_e",  name:"Moomau, E",    team:"SBF",pos:"3B",g:30,ab:104,r:19,h:30,hr:0,rbi:13,bb:19,so:16,sb:3,hbp:3,sf:2,avg:.288,obp:.376,slg:.317,ops:.693,
+    seasons:[{yr:2024,team:"SBF",g:28,ab:96,avg:.271,ops:.692,note:""},{yr:2025,team:"SBF",g:30,ab:104,avg:.288,ops:.693,note:"2-year Forester"}]},
+  {id:"kiel_t",    name:"Kiel II, T",   team:"SBF",pos:"CF",g:29,ab:115,r:20,h:33,hr:0,rbi:18,bb:7,so:13,sb:10,hbp:7,sf:2,avg:.287,obp:.355,slg:.365,ops:.720,
+    seasons:[{yr:2024,team:"SBF",g:24,ab:88,avg:.273,ops:.694,note:""},{yr:2025,team:"SBF",g:29,ab:115,avg:.287,ops:.720,note:"2-year Forester"}]},
+  {id:"chamberlain_c",name:"Chamberlain, C",team:"SBF",pos:"C",g:23,ab:72,r:15,h:22,hr:0,rbi:18,bb:19,so:21,sb:5,hbp:2,sf:0,avg:.306,obp:.432,slg:.431,ops:.863,
+    seasons:[{yr:2025,team:"SBF",g:23,ab:72,avg:.306,ops:.863,note:""}]},
+  // CO
+  {id:"schwartz_j",name:"Schwartz, J",  team:"CO", pos:"1B",g:23,ab:62, r:17,h:25,hr:2,rbi:8, bb:10,so:9, sb:1,hbp:5,sf:0,avg:.403,obp:.507,slg:.565,ops:1.072,
+    seasons:[{yr:2025,team:"CO",g:23,ab:62,avg:.403,ops:1.072,note:"Best AVG among qualified S. Division hitters"}]},
+  {id:"galloway_j",name:"Galloway, J",  team:"CO", pos:"C", g:31,ab:94, r:22,h:28,hr:1,rbi:21,bb:20,so:7, sb:3,hbp:5,sf:4,avg:.298,obp:.412,slg:.362,ops:.774,
+    seasons:[{yr:2024,team:"CO",g:26,ab:80,avg:.275,ops:.714,note:""},{yr:2025,team:"CO",g:31,ab:94,avg:.298,ops:.774,note:"7 SO in 31 games — elite contact hitter; 2nd season with Oaks"}]},
+  {id:"kendlinger_t",name:"Kendlinger, T",team:"CO",pos:"CF",g:26,ab:92,r:20,h:26,hr:1,rbi:14,bb:16,so:16,sb:10,hbp:6,sf:1,avg:.283,obp:.385,slg:.370,ops:.755,
+    seasons:[{yr:2025,team:"CO",g:26,ab:92,avg:.283,ops:.755,note:""}]},
+  // OCR
+  {id:"navarro_b",name:"Navarro, B",    team:"OCR",pos:"OF",g:33,ab:125,r:28,h:46,hr:2,rbi:17,bb:27,so:12,sb:12,hbp:1,sf:0,avg:.368,obp:.481,slg:.464,ops:.945,
+    seasons:[{yr:2024,team:"OCR",g:29,ab:108,avg:.324,ops:.858,note:""},{yr:2025,team:"OCR",g:33,ab:125,avg:.368,ops:.945,note:"Division-leading AVG · 7.5% K rate (lowest in CCL) · 2-year Riptide"}]},
+  {id:"montgomery_r",name:"Montgomery, R",team:"OCR",pos:"CF",g:28,ab:102,r:16,h:34,hr:2,rbi:26,bb:14,so:26,sb:8,hbp:5,sf:1,avg:.333,obp:.411,slg:.441,ops:.852,
+    seasons:[{yr:2025,team:"OCR",g:28,ab:102,avg:.333,ops:.852,note:""}]},
+  {id:"johnson_l",name:"Johnson, L",    team:"OCR",pos:"3B",g:32,ab:115,r:28,h:35,hr:0,rbi:22,bb:8,so:24,sb:18,hbp:7,sf:4,avg:.304,obp:.369,slg:.391,ops:.760,
+    seasons:[{yr:2025,team:"OCR",g:32,ab:115,avg:.304,ops:.760,note:"18 SB"}]},
+  // AS
+  {id:"enright_t",name:"Enright, T",    team:"AS", pos:"SS",g:34,ab:136,r:25,h:43,hr:2,rbi:24,bb:27,so:21,sb:6,hbp:2,sf:2,avg:.316,obp:.408,slg:.434,ops:.842,
+    seasons:[{yr:2024,team:"AS",g:30,ab:118,avg:.297,ops:.782,note:""},{yr:2025,team:"AS",g:34,ab:136,avg:.316,ops:.842,note:"2-year Saint"}]},
+  {id:"freer_j",  name:"Freer, J",      team:"AS", pos:"SS",g:32,ab:127,r:25,h:43,hr:0,rbi:22,bb:18,so:30,sb:12,hbp:2,sf:1,avg:.339,obp:.393,slg:.370,ops:.763,
+    seasons:[{yr:2025,team:"AS",g:32,ab:127,avg:.339,ops:.763,note:"2nd on Saints in hits"}]},
+  {id:"milto_j",  name:"Milto, J",      team:"AS", pos:"OF",g:31,ab:115,r:28,h:36,hr:4,rbi:32,bb:15,so:36,sb:11,hbp:7,sf:1,avg:.313,obp:.401,slg:.487,ops:.888,
+    seasons:[{yr:2025,team:"AS",g:31,ab:115,avg:.313,ops:.888,note:"Led Saints in RBI (32) and HR (4)"}]},
+  // North — SS
+  {id:"handron_m",name:"Handron, M",    team:"SS", pos:"IF",g:19,ab:82, r:24,h:36,hr:6,rbi:32,bb:15,so:12,sb:2,hbp:2,sf:2,avg:.439,obp:.533,slg:.756,ops:1.289,
+    seasons:[{yr:2025,team:"SS",g:19,ab:82,avg:.439,ops:1.289,note:"Highest OPS in CCL (1.289) · 6 HR in 19 games · Small-sample standout"}]},
+  {id:"boardman_c",name:"Boardman, C",  team:"SS", pos:"SS",g:32,ab:117,r:24,h:33,hr:0,rbi:22,bb:24,so:17,sb:16,hbp:11,sf:0,avg:.282,obp:.414,slg:.325,ops:.739,
+    seasons:[{yr:2024,team:"SS",g:28,ab:100,avg:.260,ops:.682,note:""},{yr:2025,team:"SS",g:32,ab:117,avg:.282,ops:.739,note:"16 SB · 2-year Stomper"}]},
+  {id:"sebastiani_n",name:"Sebastiani, N",team:"SS",pos:"CF",g:26,ab:90,r:22,h:27,hr:4,rbi:17,bb:14,so:28,sb:9,hbp:11,sf:3,avg:.300,obp:.432,slg:.467,ops:.899,
+    seasons:[{yr:2025,team:"SS",g:26,ab:90,avg:.300,ops:.899,note:"4 HR · 11 HBP"}]},
+  // WCC
+  {id:"donnelly_j",name:"Donnelly, J",  team:"WCC",pos:"OF",g:33,ab:123,r:31,h:42,hr:2,rbi:25,bb:17,so:20,sb:9,hbp:5,sf:1,avg:.341,obp:.408,slg:.455,ops:.863,
+    seasons:[{yr:2024,team:"WCC",g:28,ab:102,avg:.314,ops:.820,note:""},{yr:2025,team:"WCC",g:33,ab:123,avg:.341,ops:.863,note:"Led Crawdads in hits (42) · 2-year Crawdad"}]},
+  {id:"youens_j",name:"Youens, J",      team:"WCC",pos:"IF",g:24,ab:86, r:18,h:32,hr:2,rbi:25,bb:11,so:20,sb:9,hbp:10,sf:1,avg:.372,obp:.473,slg:.500,ops:.973,
+    seasons:[{yr:2025,team:"WCC",g:24,ab:86,avg:.372,ops:.973,note:".372 AVG in 24 games"}]},
+  // SLO
+  {id:"royal_e",  name:"Royal, E",      team:"SLO",pos:"OF",g:38,ab:138,r:25,h:41,hr:1,rbi:13,bb:24,so:25,sb:12,hbp:6,sf:1,avg:.297,obp:.389,slg:.355,ops:.744,
+    seasons:[{yr:2024,team:"SLO",g:34,ab:120,avg:.283,ops:.718,note:""},{yr:2025,team:"SLO",g:38,ab:138,avg:.297,ops:.744,note:"Most AB on Blues · 2-year Blue"}]},
+  {id:"ardoin_s",name:"Ardoin, S",      team:"SLO",pos:"SS",g:36,ab:134,r:26,h:41,hr:2,rbi:22,bb:16,so:27,sb:9,hbp:1,sf:1,avg:.306,obp:.370,slg:.425,ops:.795,
+    seasons:[{yr:2025,team:"SLO",g:36,ab:134,avg:.306,ops:.795,note:""}]},
+  // MPL
+  {id:"bose_j",   name:"Bose, J",       team:"MPL",pos:"SS",g:36,ab:132,r:20,h:43,hr:2,rbi:19,bb:16,so:17,sb:6,hbp:12,sf:0,avg:.326,obp:.424,slg:.447,ops:.871,
+    seasons:[{yr:2024,team:"MPL",g:30,ab:110,avg:.300,ops:.820,note:""},{yr:2025,team:"MPL",g:36,ab:132,avg:.326,ops:.871,note:"12 HBP · 2-year Legend"}]},
+];
+
+/* ════ PITCHERS ════ */
+const PITCHING=[
+  {id:"featherston_r",name:"Featherston, R",team:"SLO",g:6,gs:6,sv:0,ip:34.0,h:25,er:1,bb:6,so:33,w:4,era:0.27,whip:0.91,k9:8.7,bb9:1.6,
+    seasons:[{yr:2025,team:"SLO",g:6,ip:34.0,era:0.27,so:33,note:"Best ERA in CCL — dominant starter"}]},
+  {id:"krodel_a",  name:"Krodel, A",    team:"SBF",g:7,gs:7,sv:0,ip:31.0,h:22,er:6,bb:9,so:44,w:2,era:1.74,whip:1.00,k9:12.8,bb9:2.6,
+    seasons:[{yr:2025,team:"SBF",g:7,ip:31.0,era:1.74,so:44,note:"Led all of CCL in K (44) · 12.8 K/9"}]},
+  {id:"harper_j",  name:"Harper, J",    team:"SS", g:5,gs:4,sv:0,ip:18.0,h:10,er:1,bb:6,so:29,w:3,era:0.50,whip:0.89,k9:14.5,bb9:3.0,
+    seasons:[{yr:2025,team:"SS",g:5,ip:18.0,era:0.50,so:29,note:"0.50 ERA · 14.5 K/9 — best K rate in CCL"}]},
+  {id:"white_a",   name:"White, A",     team:"WCC",g:7,gs:6,sv:0,ip:35.2,h:20,er:4,bb:16,so:38,w:4,era:1.01,whip:1.01,k9:9.6,bb9:4.0,
+    seasons:[{yr:2025,team:"WCC",g:7,ip:35.2,era:1.01,so:38,note:"4 wins · Led Crawdads staff"}]},
+  {id:"erspamer_m",name:"Erspamer, M",  team:"OCR",g:8,gs:6,sv:0,ip:34.0,h:19,er:7,bb:9,so:33,w:6,era:1.85,whip:0.82,k9:8.7,bb9:2.4,
+    seasons:[{yr:2025,team:"OCR",g:8,ip:34.0,era:1.85,so:33,note:"Led CCL with 6 wins · 0.82 WHIP"}]},
+  {id:"eaves_s",   name:"Eaves, S",     team:"SBF",g:7,gs:0,sv:4,ip:10.0,h:4,er:0,bb:0,so:14,w:1,era:0.00,whip:0.40,k9:12.6,bb9:0.0,
+    seasons:[{yr:2025,team:"SBF",g:7,ip:10.0,era:0.00,so:14,note:"4 SV · 0.00 ERA · 0 BB in 10 IP — elite closer"}]},
+  {id:"james_z",   name:"James, Z",     team:"SBF",g:6,gs:3,sv:1,ip:21.2,h:17,er:3,bb:4,so:25,w:0,era:1.25,whip:0.97,k9:10.4,bb9:1.7,
+    seasons:[{yr:2025,team:"SBF",g:6,ip:21.2,era:1.25,so:25,note:"1.25 ERA · 4.25 K:BB"}]},
+  {id:"decker_c",  name:"Decker, C",    team:"CO", g:7,gs:7,sv:0,ip:35.0,h:33,er:10,bb:10,so:39,w:4,era:2.57,whip:1.23,k9:10.0,bb9:2.6,
+    seasons:[{yr:2025,team:"CO",g:7,ip:35.0,era:2.57,so:39,note:"Most IP among South starters"}]},
+  {id:"santivanez_n",name:"Santivanez, N",team:"SS",g:6,gs:6,sv:0,ip:24.0,h:14,er:7,bb:16,so:34,w:4,era:2.63,whip:1.25,k9:12.8,bb9:6.0,
+    seasons:[{yr:2025,team:"SS",g:6,ip:24.0,era:2.63,so:34,note:"34 K in 24 IP · 4 wins for Stompers"}]},
+  {id:"duncan_l",  name:"Duncan, L",    team:"SS", g:8,gs:0,sv:0,ip:10.0,h:5,er:0,bb:4,so:19,w:0,era:0.00,whip:0.90,k9:17.1,bb9:3.6,
+    seasons:[{yr:2025,team:"SS",g:8,ip:10.0,era:0.00,so:19,note:"0.00 ERA · Highest K/9 in CCL (17.1)"}]},
+];
+
+/* ════ HELPERS ════ */
+const fa=v=>v.toFixed(3).replace('0.','.');
+function ca(v){if(v>=.360)return'hi-green';if(v>=.310)return'hi-blue';if(v<.230)return'hi-red';return'';}
+function co(v){if(v>=1.000)return'hi-gold';if(v>=.900)return'hi-green';if(v>=.750)return'hi-blue';if(v<.650)return'hi-red';return'';}
+function ce(v){if(v<=1.00)return'hi-green';if(v<=2.00)return'hi-blue';if(v>3.50)return'hi-red';return'';}
+function cpct(v){if(v>=.640)return'hi-green';if(v>=.560)return'hi-blue';if(v<.400)return'hi-red';return'';}
+
+/* ════ BUILD ════ */
+function buildStandings(divF,tbodyId){
+  const rows=TEAMS.filter(t=>!divF||t.div===divF);
+  document.getElementById(tbodyId).innerHTML=rows.map(t=>{
+    const p=t.w/t.g;
+    const cls=t.w/t.g>=.640?'style="background:var(--gold-pale)"':'';
+    return`<tr ${cls}>
+      <td class="left"><span class="click-team" onclick="openTeam('${t.id}')">${t.name}</span></td>
+      ${!divF?'<td class="left" style="font-size:10px;color:var(--text-muted)">'+t.div+'</td>':''}
+      <td>${t.g}</td><td>${t.w}</td><td>${t.l}</td>
+      <td class="${cpct(p)}">${p.toFixed(3).replace('0.','.')}</td>
+      <td>${t.r}</td>
+      <td>${t.avg.toFixed(3).replace('0.','.')}</td>
+      <td>${t.obp.toFixed(3).replace('0.','.')}</td>
+      <td>${t.ops.toFixed(3).replace('0.','.')}</td>
+      <td class="left" style="font-size:11px">${t.stadium}</td>
+      ${divF?'<td class="left" style="font-size:11px;color:var(--text-muted)">'+t.city+'</td>':''}
+    </tr>`;
+  }).join('');
+}
+
+function buildBatters(tbodyId,divF){
+  const data=divF?BATTING.filter(p=>TEAMS.find(t=>t.id===p.team)?.div===divF):BATTING;
+  const sorted=[...data].sort((a,b)=>b.ops-a.ops);
+  document.getElementById(tbodyId).innerHTML=sorted.map(p=>`<tr>
+    <td class="left"><span class="click-player" onclick="openPlayer('${p.id}')">${p.name}</span></td>
+    <td class="left" style="font-size:10px;color:var(--text-muted)">${p.team}</td>
+    <td class="left">${p.pos}</td>
+    <td>${p.g}</td><td>${p.ab}</td><td>${p.r}</td><td>${p.h}</td>
+    <td>${p.hr}</td><td>${p.rbi}</td><td>${p.bb}</td><td>${p.so}</td><td>${p.sb}</td>
+    <td class="${ca(p.avg)}">${fa(p.avg)}</td>
+    <td class="${ca(p.obp)}">${fa(p.obp)}</td>
+    <td>${fa(p.slg)}</td>
+    <td class="${co(p.ops)}">${fa(p.ops)}</td>
+  </tr>`).join('');
+}
+
+function buildPitchers(){
+  const sorted=[...PITCHING].sort((a,b)=>a.era-b.era);
+  document.getElementById('pit-body').innerHTML=sorted.map(p=>`<tr>
+    <td class="left"><span class="click-player" onclick="openPitcher('${p.id}')">${p.name}</span></td>
+    <td class="left" style="font-size:10px;color:var(--text-muted)">${p.team}</td>
+    <td>${p.g}</td><td>${p.gs}</td><td>${p.ip.toFixed(1)}</td>
+    <td>${p.h}</td><td>${p.er}</td><td>${p.bb}</td><td>${p.so}</td>
+    <td>${p.w}</td><td>${p.sv}</td>
+    <td class="${ce(p.era)}">${p.era.toFixed(2)}</td>
+    <td>${p.whip.toFixed(2)}</td>
+    <td>${p.k9.toFixed(1)}</td><td>${p.bb9.toFixed(1)}</td>
+  </tr>`).join('');
+}
+
+function buildLeaders(containerId, divF){
+  const data=divF?BATTING.filter(p=>TEAMS.find(t=>t.id===p.team)?.div===divF):BATTING;
+  const q=data.filter(p=>p.ab>=50);
+  const cats=[
+    {title:'Batting Average',key:'avg',fmt:fa},
+    {title:'On-Base Pct',key:'obp',fmt:fa},
+    {title:'OPS',key:'ops',fmt:v=>v.toFixed(3)},
+    {title:'Home Runs',key:'hr',fmt:v=>v},
+    {title:'RBI',key:'rbi',fmt:v=>v},
+    {title:'Stolen Bases',key:'sb',fmt:v=>v},
+  ];
+  document.getElementById(containerId).innerHTML=cats.map(c=>{
+    const top=[...q].sort((a,b)=>b[c.key]-a[c.key]).slice(0,5);
+    return`<div class="leader-box"><div class="leader-box-hdr">${c.title}</div>`+
+      top.map((p,i)=>`<div class="leader-row"><span class="lr-rank">${i+1}</span><span class="lr-name" onclick="openPlayer('${p.id}')">${p.name}</span><span class="lr-team">${p.team}</span><span class="lr-val">${c.fmt(p[c.key])}</span></div>`).join('')+
+    '</div>';
+  }).join('');
+}
+
+/* ════ DRAWER — PLAYER ════ */
+function openPlayer(id){
+  const p=BATTING.find(x=>x.id===id);if(!p)return;
+  const team=TEAMS.find(t=>t.id===p.team);
+  document.getElementById('d-type').textContent='Player Profile — CCL 2025';
+  document.getElementById('d-title').textContent=p.name.replace(',','').trim().split(' ').reverse().join(' ');
+  document.getElementById('d-sub').textContent=`${team?.name||p.team} · ${p.pos}`;
+  const hist=p.seasons||[];
+  const histRows=hist.map(s=>`<tr class="${s.yr===2025?'highlight':''}">
+    <td class="left">${s.yr}</td><td class="left">${s.team}</td>
+    <td>${s.g}</td><td>${s.ab}</td>
+    <td class="${ca(s.avg)}">${fa(s.avg)}</td>
+    <td class="${co(s.ops)}">${s.ops.toFixed(3)}</td>
+    <td class="left" style="font-size:10px;color:var(--text-muted)">${s.note||''}</td>
+  </tr>`).join('');
+  document.getElementById('d-body').innerHTML=`
+    <div class="info-grid">
+      <div class="info-card"><div class="ic-label">Team</div><div class="ic-val">${team?.name||p.team}</div></div>
+      <div class="info-card"><div class="ic-label">Position</div><div class="ic-val">${p.pos}</div></div>
+      <div class="info-card"><div class="ic-label">2025 AVG</div><div class="ic-val" style="color:var(--green)">${fa(p.avg)}</div></div>
+      <div class="info-card"><div class="ic-label">2025 OPS</div><div class="ic-val" style="color:var(--green)">${p.ops.toFixed(3)}</div></div>
+    </div>
+    <div class="d-section">
+      <div class="d-section-label">2025 Stats (Source: CCL Pointstreak)</div>
+      <div style="overflow-x:auto"><table class="d-table">
+        <thead><tr><th>G</th><th>AB</th><th>R</th><th>H</th><th>HR</th><th>RBI</th><th>BB</th><th>SO</th><th>SB</th><th>AVG</th><th>OBP</th><th>SLG</th><th>OPS</th></tr></thead>
+        <tbody><tr>
+          <td>${p.g}</td><td>${p.ab}</td><td>${p.r}</td><td>${p.h}</td><td>${p.hr}</td><td>${p.rbi}</td><td>${p.bb}</td><td>${p.so}</td><td>${p.sb}</td>
+          <td class="${ca(p.avg)}">${fa(p.avg)}</td><td>${fa(p.obp)}</td><td>${fa(p.slg)}</td><td class="${co(p.ops)}">${p.ops.toFixed(3)}</td>
+        </tr></tbody>
+      </table></div>
+    </div>
+    ${hist.length>0?`<div class="d-section">
+      <div class="d-section-label">CCL Career History (${hist.length} season${hist.length>1?'s':''})</div>
+      <div style="overflow-x:auto"><table class="d-table">
+        <thead><tr><th class="left">Year</th><th class="left">Team</th><th>G</th><th>AB</th><th>AVG</th><th>OPS</th><th class="left">Notes</th></tr></thead>
+        <tbody>${histRows}</tbody>
+      </table></div>
+    </div>`:''}
+    <div class="note-box"><b>Source:</b> CCL Pointstreak (calsummerball.com). Green row = 2025 season. Multi-year data confirmed from Pointstreak archives.</div>
+  `;
+  openDrawer();
+}
+
+function openPitcher(id){
+  const p=PITCHING.find(x=>x.id===id);if(!p)return;
+  const team=TEAMS.find(t=>t.id===p.team);
+  document.getElementById('d-type').textContent='Pitcher Profile — CCL 2025';
+  document.getElementById('d-title').textContent=p.name.replace(',','').trim().split(' ').reverse().join(' ');
+  document.getElementById('d-sub').textContent=`${team?.name||p.team} · RHP/LHP`;
+  const hist=p.seasons||[];
+  document.getElementById('d-body').innerHTML=`
+    <div class="info-grid">
+      <div class="info-card"><div class="ic-label">Team</div><div class="ic-val">${team?.name||p.team}</div></div>
+      <div class="info-card"><div class="ic-label">2025 ERA</div><div class="ic-val" style="color:var(--green)">${p.era.toFixed(2)}</div></div>
+      <div class="info-card"><div class="ic-label">IP</div><div class="ic-val">${p.ip.toFixed(1)}</div></div>
+      <div class="info-card"><div class="ic-label">K/9</div><div class="ic-val">${p.k9.toFixed(1)}</div></div>
+    </div>
+    <div class="d-section">
+      <div class="d-section-label">2025 Stats (Source: CCL Pointstreak)</div>
+      <div style="overflow-x:auto"><table class="d-table">
+        <thead><tr><th>G</th><th>GS</th><th>IP</th><th>H</th><th>ER</th><th>BB</th><th>K</th><th>W</th><th>SV</th><th>ERA</th><th>WHIP</th><th>K/9</th><th>BB/9</th></tr></thead>
+        <tbody><tr>
+          <td>${p.g}</td><td>${p.gs}</td><td>${p.ip.toFixed(1)}</td><td>${p.h}</td><td>${p.er}</td><td>${p.bb}</td><td>${p.so}</td><td>${p.w}</td><td>${p.sv}</td>
+          <td class="${ce(p.era)}">${p.era.toFixed(2)}</td><td>${p.whip.toFixed(2)}</td><td>${p.k9.toFixed(1)}</td><td>${p.bb9.toFixed(1)}</td>
+        </tr></tbody>
+      </table></div>
+    </div>
+    ${hist.length>0?`<div class="d-section"><div class="d-section-label">CCL Pitching History</div>
+    <table class="d-table"><thead><tr><th class="left">Year</th><th class="left">Team</th><th>G</th><th>IP</th><th>ERA</th><th>SO</th><th class="left">Notes</th></tr></thead>
+    <tbody>${hist.map(s=>`<tr class="${s.yr===2025?'highlight':''}"><td class="left">${s.yr}</td><td class="left">${s.team}</td><td>${s.g}</td><td>${s.ip.toFixed(1)}</td><td class="${ce(s.era)}">${s.era.toFixed(2)}</td><td>${s.so}</td><td class="left" style="font-size:10px;color:var(--text-muted)">${s.note||''}</td></tr>`).join('')}</tbody>
+    </table></div>`:''}
+    <div class="note-box"><b>Source:</b> CCL Pointstreak (calsummerball.com). Data verified from 2025 season statistics.</div>
+  `;
+  openDrawer();
+}
+
+/* ════ DRAWER — TEAM ════ */
+function openTeam(id){
+  const t=TEAMS.find(x=>x.id===id);if(!t)return;
+  document.getElementById('d-type').textContent='Team Profile — California Collegiate League';
+  document.getElementById('d-title').textContent=t.name;
+  document.getElementById('d-sub').textContent=`${t.div} Division · ${t.city} · Est. ${t.founded}`;
+  const hist=TEAM_HISTORY[id];
+  const champChips=(t.champs||[]).map(y=>`<span class="champ-chip">🏆 ${y}</span>`).join('');
+  document.getElementById('d-body').innerHTML=`
+    <div class="info-grid">
+      <div class="info-card"><div class="ic-label">City</div><div class="ic-val">${t.city}</div></div>
+      <div class="info-card"><div class="ic-label">Stadium</div><div class="ic-val">${t.stadium}</div></div>
+      <div class="info-card"><div class="ic-label">Founded</div><div class="ic-val">${t.founded}</div></div>
+      <div class="info-card"><div class="ic-label">2025 Record</div><div class="ic-val">${t.w}–${t.l}</div></div>
+    </div>
+    ${t.champs?.length?`<div class="d-section"><div class="d-section-label">CCL Championship Years (${t.champs.length} total)</div><div>${champChips}</div></div>`:''}
+    ${hist?`<div class="d-section">
+      <div class="d-section-label">Year-by-Year Records (Verified)</div>
+      <div style="overflow-x:auto"><table class="d-table">
+        <thead><tr><th class="left">Year</th><th class="left">Name</th><th>W</th><th>L</th><th>PCT</th><th class="left">Notes</th></tr></thead>
+        <tbody>${hist.map(s=>`<tr class="${s.champ?'champ-row':s.yr===2025?'highlight':''}">
+          <td class="left">${s.yr}</td><td class="left">${s.name||'—'}</td>
+          <td>${s.w!=null?s.w:'—'}</td><td>${s.l!=null?s.l:'—'}</td>
+          <td>${s.w!=null?(s.w/(s.w+s.l)).toFixed(3).replace('0.','.'):' — '}</td>
+          <td class="left" style="font-size:10px;color:var(--text-muted)">${s.note||''}</td>
+        </tr>`).join('')}</tbody>
+      </table></div>
+    </div>`:
+    `<div class="note-box"><b>Note:</b> Detailed year-by-year records not yet in database. See <b>calsummerball.com</b> for full history.</div>`}
+  `;
+  openDrawer();
+}
+
+function openDrawer(){document.getElementById('overlay').classList.add('open');document.getElementById('drawer').classList.add('open');document.body.style.overflow='hidden';}
+function closeDrawer(){document.getElementById('overlay').classList.remove('open');document.getElementById('drawer').classList.remove('open');document.body.style.overflow='';}
+
+const TITLES={overview:'CCL 2025 — League Overview',south:'CCL South Division — 2025',north:'CCL North Division — 2025'};
+const SUBS={overview:'CLICK ANY PLAYER OR TEAM FOR HISTORY',south:'SOUTH DIVISION · 2025 SEASON',north:'NORTH DIVISION · 2025 SEASON'};
+function showView(id,btn){
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('view-'+id).classList.add('active');
+  document.getElementById('page-title').textContent=TITLES[id];
+  document.getElementById('page-sub').textContent=SUBS[id];
+}
+
+const sortState={};
+function sortTable(id,col,txt=false){
+  const tbl=document.getElementById(id);if(!tbl)return;
+  const tb=tbl.querySelector('tbody');
+  const rows=Array.from(tb.querySelectorAll('tr'));
+  const key=id+col;sortState[key]=!sortState[key];const asc=sortState[key];
+  rows.sort((a,b)=>{
+    const at=a.cells[col]?.textContent.trim()||'';const bt=b.cells[col]?.textContent.trim()||'';
+    if(txt)return asc?at.localeCompare(bt):bt.localeCompare(at);
+    return asc?(parseFloat(at)||0)-(parseFloat(bt)||0):(parseFloat(bt)||0)-(parseFloat(at)||0);
+  });
+  tbl.querySelectorAll('th').forEach(t=>t.classList.remove('sort-asc','sort-desc'));
+  tbl.querySelectorAll('th')[col]?.classList.add(asc?'sort-asc':'sort-desc');
+  rows.forEach(r=>tb.appendChild(r));
+}
+function filterTable(id,fid){
+  const q=document.getElementById(fid).value.toLowerCase();
+  document.querySelectorAll(`#${id} tbody tr`).forEach(r=>{r.style.display=(r.cells[0]?.textContent.toLowerCase().includes(q))?'':'none';});
+}
+
+/* INIT */
+buildStandings(null,'all-std-body');
+buildStandings('South','south-body');
+buildStandings('North','north-body');
+buildBatters('bat-body',null);
+buildPitchers();
+buildLeaders('bat-leaders',null);
+buildLeaders('south-leaders','South');
+buildLeaders('north-leaders','North');
+</script>
+</body>
+</html>
